@@ -6,7 +6,6 @@ const amount = document.querySelector('form input')
 const exRateTxt = document.querySelector('form .result')
 let isRotation = false
 
-console.log(exIcon)
 ;[fromCur, toCur].forEach((select, i) => {
   for (let curCode in Country_List) {
     const selected =
@@ -27,10 +26,32 @@ console.log(exIcon)
   })
 })
 
+function formatInputMoney(input) {
+  const value = input.value.replace(/\D/g, '') // Remove todos os caracteres não numéricos
+  const formattedValue = formatCurrency(value / 100) // Divide por 100 para considerar os centavos
+
+  input.value = formattedValue
+}
+
+function formatCurrency(value) {
+  const formatter = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: fromCur.value
+  })
+
+  return formatter.format(value)
+}
 // function to get exchange rate from api
 
 async function getExchangeRate() {
-  const amountValue = amount.value || 1
+  const amountValue = amount.value.replace(/\D/g, '') * 0.01 || 1
+
+  if (isNaN(amountValue)) {
+    exRateTxt.style.color = 'rgba(255, 99, 71, 1)'
+    exRateTxt.innerHTML = 'Valor Digitado Invalido !'
+    amount.value = ''
+    return
+  }
   exRateTxt.innerText = 'Getting exchenga rate...'
   try {
     const response = await fetch(
@@ -45,7 +66,9 @@ async function getExchangeRate() {
     const result = await response.json()
     const exchangeRate = result.conversion_rates[toCur.value]
     const totalExRate = (amountValue * exchangeRate).toFixed(2)
-    exRateTxt.innerHTML = `${amountValue} ${fromCur.value} = ${totalExRate} ${toCur.value}`
+    exRateTxt.innerHTML = `${formatCurrency(amountValue).slice(3)} ${
+      fromCur.value
+    } = ${formatCurrency(totalExRate).slice(3)} ${toCur.value}`
   } catch (e) {
     exRateTxt.innerHTML = 'Somenting went wrong...'
     console.log(e)
@@ -72,5 +95,6 @@ exIcon.addEventListener('click', () => {
   exIcon.style.transition = 'transform 0.5s ease'
   exIcon.style.transform = `rotate(${rotateValue})`
   isRotation = !isRotation
+  formatInputMoney(amount)
   getExchangeRate()
 })
