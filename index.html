@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ptbr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,19 +8,24 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="stylesheet" href="./style.css" />
-    <title>🪙Currency Converter</title>
+    <title>🪙Conversor de Moedas | DevSkill</title>
   </head>
   <body>
     <div class="container">
-      <h2>Currency Converter</h2>
+      <h2>Conversor de Moedas</h2>
       <form>
         <div class="amount">
-          <p>Amount :</p>
-          <input type="text" value="1" />
+          <p>Valor :</p>
+          <input
+            type="text"
+            placeholder="R$ 1,00"
+            autofocus
+            oninput="formatInputMoney(this)"
+          />
         </div>
         <div class="convert-box">
           <div class="from">
-            <p>From</p>
+            <p>De :</p>
             <div class="select-input">
               <img src="https://flagcdn.com/48x36/br.png" />
               <select></select>
@@ -28,14 +33,14 @@
           </div>
           <div class="reverse"><i class="fas fa-exchange-alt"></i></div>
           <div class="to">
-            <p>To</p>
+            <p>Para :</p>
             <div class="select-input">
               <img src="https://flagcdn.com/48x36/us.png" />
               <select></select>
             </div>
           </div>
-          <div class="result">Getting exchenge rate...</div>
-          <button>Get Exchange Rate</button>
+          <div class="result">Obtendo Taxa de Câmbio...</div>
+          <button>Obter Taxa de Câmbio</button>
         </div>
       </form>
     </div>
